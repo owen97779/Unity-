@@ -24,14 +24,14 @@ public class Planets : MonoBehaviour
         Force = force + Force;
     }
 
+    public void ClearForce()
+    {
+        Force = Vector3.zero;
+    }
+
     public void Movement()
     {
         Sphere.AddForce(Force);
-    }
-
-    private void FixedUpdate() 
-    {
-        Force = Vector3.zero; 
     }
 
 }

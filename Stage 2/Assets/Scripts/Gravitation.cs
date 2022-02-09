@@ -5,7 +5,7 @@ using UnityEngine;
 public class Gravitation : MonoBehaviour
 {
     //public GameObject Planet;
-    public int G;
+    public float G;
     Planets[] objects;
 
     // Start is called before the first frame update
@@ -43,6 +43,7 @@ public class Gravitation : MonoBehaviour
     void Movement(int i)
     {
         objects[i].Movement();
+        objects[i].ClearForce();
     }
         
     

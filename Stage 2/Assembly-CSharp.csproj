@@ -36,8 +36,8 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-     <Compile Include="Assets/Scripts/Gravitation.cs" />
      <Compile Include="Assets/Scripts/Planets.cs" />
+     <Compile Include="Assets/Scripts/Gravitation.cs" />
     <Reference Include="UnityEngine">
         <HintPath>/home/k1924273/Unity/Hub/Editor/2020.3.27f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>
