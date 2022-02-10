@@ -5,6 +5,7 @@ using UnityEngine;
 public class Gravitation : MonoBehaviour
 {
     //public GameObject Planet;
+    //test
     public float G;
     Planets[] objects;
 
