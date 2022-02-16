@@ -9,27 +9,41 @@ public class Gravitation : MonoBehaviour
 {
     //public GameObject Planet;
     public float G;
+    public float days;
     Planets[] objects;
     //Create a slider that changes the G value based on time
-    public void Slider_change_G(float newValue)
+    public void Slider_change_G(float interval)
     {
 
-        G = 0.00088995511377f / (Mathf.Pow(1/newValue, 2));
+        G = 0.00088995511377f / (Mathf.Pow(1/interval, 2));
         Debug.Log(G);
+        days = interval;
+        Debug.Log(days);
 
     }
-    public void SetVelocity(Planets[] objects)
-    {
-        for(var i = 0; i < objects.Length; i++)
+    public void SetVelocity()
+    {   
+        for(int i =0; i < objects.Length; i++)
         {
-            Rigidbody rb = objects[i].GetRigidbody();
-            //oldVelocity = rb.velocity;
-            //rb.velocity = new Vector3 (oldVelocity.x)
-            
-
-
+            Planets eachPlanet = objects[i];
+            Rigidbody rb = eachPlanet.GetRigidbody();
+            Vector3 oldVelocity = rb.velocity;
+            float X = days * oldVelocity.x;
+            float Y = days * oldVelocity.y;
+            float Z = days * oldVelocity.z;
+            rb.velocity = new Vector3 (X,Y,Z);
+            //Debug.Log(rb.velocity);
         }
-
+        /* Planets ObjectSubject= objects[i];
+        Planets ObjectObject = objects[j];
+        Rigidbody rb1 = ObjectSubject.GetRigidbody();
+        Rigidbody rb2 = ObjectObject.GetRigidbody();
+        Vector3 oldVelocity1 = rb1.velocity;
+        Vector3 oldVelocity2 = rb2.velocity;
+        rb1.velocity = new Vector3 ((days * oldVelocity1.x), (days*oldVelocity1.y), (days*oldVelocity1.z));
+        rb2.velocity = new Vector3 ((days * oldVelocity2.x), (days*oldVelocity2.y), (days*oldVelocity2.z)); */
+        //Debug.Log(rb1.velocity.x);
+        //Debug.Log(days);
         
     }
 
@@ -43,14 +57,15 @@ public class Gravitation : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        
+        if (days > 2)
+        {
+            SetVelocity();
+            Debug.Log(objects[2].velocity);
+        }
         for (var i = 0; i < objects.Length-1; i++)
         {
             for (var j = i+1; j < objects.Length; j++)
-            {
-                if (G != 3){
-                    SetVelocity(objects);
-                }
+            {    
                 Force(i,j);
             }
         }
