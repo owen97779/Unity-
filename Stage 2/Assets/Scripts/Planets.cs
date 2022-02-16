@@ -33,5 +33,18 @@ public class Planets : MonoBehaviour
     {
         Sphere.AddForce(Force);
     }
+    public void SetVelocity(Planets[] objects)
+    {
+        for(var i = 0; i < objects.Length; i++)
+        {
+            Rigidbody rb = objects[i].GetRigidbody();
+            rb.velocity = new Vector3 (1f,1f,1f);
 
+
+        }
+
+        
+    }
+
+    
 }
