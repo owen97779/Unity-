@@ -10,15 +10,18 @@ public class Gravitation : MonoBehaviour
     //public GameObject Planet;
     public float G;
     public float days;
+    public float prevdays = 1;
     Planets[] objects;
     //Create a slider that changes the G value based on time
     public void Slider_change_G(float interval)
     {
 
-        G = 0.00088995511377f / (Mathf.Pow(1/interval, 2));
+        G = 0.00088995511377f / (1/(Mathf.Pow(interval, 2)));
         Debug.Log(G);
         days = interval;
         Debug.Log(days);
+        SetVelocity();
+        prevdays = days;
 
     }
     public void SetVelocity()
@@ -28,10 +31,12 @@ public class Gravitation : MonoBehaviour
             Planets eachPlanet = objects[i];
             Rigidbody rb = eachPlanet.GetRigidbody();
             Vector3 oldVelocity = rb.velocity;
-            float X = days * oldVelocity.x;
-            float Y = days * oldVelocity.y;
-            float Z = days * oldVelocity.z;
-            rb.velocity = new Vector3 (X,Y,Z);
+            Debug.Log(days);
+            rb.velocity = days/prevdays * oldVelocity;
+            // float X = (days) * oldVelocity.x;
+            // float Y = (days) * oldVelocity.y;
+            // float Z = (days) * oldVelocity.z;
+            // rb.velocity = new Vector3 (X,Y,Z);
             //Debug.Log(rb.velocity);
         }
         /* Planets ObjectSubject= objects[i];
@@ -59,9 +64,9 @@ public class Gravitation : MonoBehaviour
     {
         if (days > 2)
         {
-            SetVelocity();
-            Debug.Log(objects[2].velocity);
-        }
+            
+            //Debug.Log(objects[4].velocity);
+        } 
         for (var i = 0; i < objects.Length-1; i++)
         {
             for (var j = i+1; j < objects.Length; j++)
