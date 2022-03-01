@@ -12,6 +12,7 @@ public class Gravitation : MonoBehaviour
     public float days;
     public float prevdays = 1;
     Planets[] objects;
+	public Text outputtingTime;
     //Create a slider that changes the G value based on time
     public void Slider_change_G(float interval)
     {
@@ -22,10 +23,11 @@ public class Gravitation : MonoBehaviour
         Debug.Log(days);
         SetVelocity();
         prevdays = days;
-
     }
+
     public void SetVelocity()
     {   
+		//outputtingTime.text = days.ToString();
         for(int i =0; i < objects.Length; i++)
         {
             Planets eachPlanet = objects[i];
@@ -33,6 +35,7 @@ public class Gravitation : MonoBehaviour
             Vector3 oldVelocity = rb.velocity;
             Debug.Log(days);
             rb.velocity = days/prevdays * oldVelocity;
+			
             // float X = (days) * oldVelocity.x;
             // float Y = (days) * oldVelocity.y;
             // float Z = (days) * oldVelocity.z;
@@ -57,14 +60,17 @@ public class Gravitation : MonoBehaviour
     void Start()
     {
         objects = FindObjectsOfType<Planets>();
+		Text outputtingTime = GameObject.Find("Canvas - HUD/HUD Parent/TextParent/Panel/Time Text").GetComponent<Text>();
+		outputtingTime.text = "Fix this";
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (days > 2)
+		
+        if (days > 1)
         {
-            
+            //outputtingTime.text = "Test";
             //Debug.Log(objects[4].velocity);
         } 
         for (var i = 0; i < objects.Length-1; i++)
