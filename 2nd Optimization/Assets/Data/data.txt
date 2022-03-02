@@ -1,0 +1,90 @@
+START
+ISINITIALPREFAB
+type = star
+mass = 333000
+name = Sun
+position = x=0 y=0 z=0
+radius = 15
+END
+
+
+START
+ISINITIALPREFAB
+type = planet
+mass = 0.0553
+name = Mecury
+orbits = Sun
+position = x =38.7 y=0 z=0
+radius = 2
+END
+
+START
+ISINITIALPREFAB
+type = planet
+mass = 0.815
+name = Venus
+orbits = Sun
+position = x =72.3 y=0 z=0
+radius = 5
+END
+
+START
+ISINITIALPREFAB
+type = planet
+mass = 1.0
+name = Earth
+orbits = Sun
+position = x =100 y=0 z=0
+radius = 5
+END
+
+START
+ISINITIALPREFAB
+type = planet
+name = Mars
+mass= 0.107
+position = x =152 y=0 z=0
+radius = 3
+orbits = Sun
+END
+
+START
+ISINITIALPREFAB
+type = planet
+name = Jupiter
+mass= 317.8
+position = x =520 y=0 z=0
+radius = 10
+orbits = Sun
+END
+
+START
+ISINITIALPREFAB
+type = planet
+name = Saturn
+mass= 95.2
+position = x =957 y=0 z=0
+radius = 9
+orbits = Sun
+END
+
+START
+ISINITIALPREFAB
+type = planet
+name = Uranus
+mass= 14.5
+position = x =1917 y=0 z=0
+radius = 9
+orbits = Sun
+END
+
+START
+ISINITIALPREFAB
+type = planet
+name = Neptune
+mass= 17.1
+position = x =3018 y=0 z=0
+radius = 9
+orbits = Sun
+END
+ENDTXT
