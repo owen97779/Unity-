@@ -44,7 +44,7 @@ ISINITIALPREFAB
 type = planet
 name = Jupiter
 mass= 317.8
-position = x =504.7 y=0 z=125.21
+position = x =504.777 y=0 z=124.93  
 radius = 0.04692014
 orbits = Sun
 END

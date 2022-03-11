@@ -336,7 +336,7 @@ public class Main : MonoBehaviour
             {
                 if(co.getName().Equals("Rocket2")){
                     //Debug.Log(co.getRigidbody().velocity.x);
-                    Vector3 rocketPositionVector = new Vector3(co.getRigidbody().position.x, co.getRigidbody().position.y, co.getRigidbody().position.z);
+                    //Vector3 rocketPositionVector = new Vector3(co.getRigidbody().position.x, co.getRigidbody().position.y, co.getRigidbody().position.z);
                     if(co.getRigidbody().velocity.x > 1.697f*currentSimulationSpeed)
                     {
                         if(mainSceneisPaused == false)
@@ -349,8 +349,8 @@ public class Main : MonoBehaviour
                     if(co.getRigidbody().velocity.magnitude /currentSimulationSpeed > maxVelocity && co.getRigidbody().position.z > 500)
                     {
                         maxVelocity = co.getRigidbody().velocity.magnitude / currentSimulationSpeed;
-                        Vector3 jupiterFlyByDistance = new Vector3(jupiterPositionVector.x - rocketPositionVector.x, jupiterPositionVector.y - rocketPositionVector.y, jupiterPositionVector.z - rocketPositionVector.z);
-                        Debug.Log("The max velocity is: "+ maxVelocity + "The position is: " + co.getRigidbody().position.x + " "+ co.getRigidbody().position.y +" "+ co.getRigidbody().position.z +" THE DISTANCE BETWEEN THE TWO IS " + jupiterFlyByDistance.magnitude);
+                        //Vector3 jupiterFlyByDistance = new Vector3(jupiterPositionVector.x - rocketPositionVector.x, jupiterPositionVector.y - rocketPositionVector.y, jupiterPositionVector.z - rocketPositionVector.z);
+                        Debug.Log("The max velocity is: "+ maxVelocity + "The position is: " + co.getRigidbody().position.x + " "+ co.getRigidbody().position.y +" "+ co.getRigidbody().position);
                          
                     }
 
@@ -358,7 +358,7 @@ public class Main : MonoBehaviour
                 }
                 if(co.getName().Equals("Jupiter"))
                 {
-                    Vector3 jupiterPositionVector = new Vector3(co.getRigidbody().position.x, co.getRigidbody().position.y, co.getRigidbody().position.z);
+                    //Vector3 jupiterPositionVector = new Vector3(co.getRigidbody().position.x, co.getRigidbody().position.y, co.getRigidbody().position.z);
                 }
                 transform.LookAt(target);
 
@@ -370,22 +370,22 @@ public class Main : MonoBehaviour
     }
     void Update()
     {
-        //if (updateFixedUpdateCountPerSecond != speed)
-        //{
-        //    changeSimulationSpeed(speed);
-        //        
-        //}
+        if (currentSimulationSpeed != speed)
+        {
+            changeSimulationSpeed(speed);
+                
+        }
         foreach(CelestialObject co in CelestialObjects)
         {   
-            if(co.getName().Equals("Jupiter"))
+            //if(co.getName().Equals("Jupiter"))
             if(co.getName().Equals("Rocket2") && co.getRigidbody().position.z > 500f)
             {
-                changeSimulationSpeed(0.25f);
+                //changeSimulationSpeed(0.25f);
                 //Debug.Log("YESS");
             }
             if(co.getName().Equals("Rocket2") && co.getRigidbody().position.z <500f)
             {
-                changeSimulationSpeed(10);
+                //changeSimulationSpeed(20);
             }
 
         }
