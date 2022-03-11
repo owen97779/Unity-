@@ -346,50 +346,50 @@ public class Main : MonoBehaviour
 
                     }
                     
-                    if(co.getRigidbody().velocity.magnitude /currentSimulationSpeed > maxVelocity && co.getRigidbody().position.z > 500)
-                    {
-                        maxVelocity = co.getRigidbody().velocity.magnitude / currentSimulationSpeed;
-                        //Vector3 jupiterFlyByDistance = new Vector3(jupiterPositionVector.x - rocketPositionVector.x, jupiterPositionVector.y - rocketPositionVector.y, jupiterPositionVector.z - rocketPositionVector.z);
-                        Debug.Log("The max velocity is: "+ maxVelocity + "The position is: " + co.getRigidbody().position.x + " "+ co.getRigidbody().position.y +" "+ co.getRigidbody().position);
+                    // if(co.getRigidbody().velocity.magnitude /currentSimulationSpeed > maxVelocity && co.getRigidbody().position.z > 500)
+                    // {
+                    //     maxVelocity = co.getRigidbody().velocity.magnitude / currentSimulationSpeed;
+                    //     //Vector3 jupiterFlyByDistance = new Vector3(jupiterPositionVector.x - rocketPositionVector.x, jupiterPositionVector.y - rocketPositionVector.y, jupiterPositionVector.z - rocketPositionVector.z);
+                    //     Debug.Log("The max velocity is: "+ maxVelocity + "The position is: " + co.getRigidbody().position.x + " "+ co.getRigidbody().position.y +" "+ co.getRigidbody().position);
                          
-                    }
+                    // }
 
                     
                 }
-                if(co.getName().Equals("Jupiter"))
-                {
-                    //Vector3 jupiterPositionVector = new Vector3(co.getRigidbody().position.x, co.getRigidbody().position.y, co.getRigidbody().position.z);
-                }
-                transform.LookAt(target);
+                // if(co.getName().Equals("Jupiter"))
+                // {
+                //     //Vector3 jupiterPositionVector = new Vector3(co.getRigidbody().position.x, co.getRigidbody().position.y, co.getRigidbody().position.z);
+                // }
+                // transform.LookAt(target);
 
             } 
             
             
-            updateFixedUpdateCountPerSecond += 1;
+            // updateFixedUpdateCountPerSecond += 1;
         
     }
     void Update()
     {
-        if (currentSimulationSpeed != speed)
-        {
-            changeSimulationSpeed(speed);
+        // if (currentSimulationSpeed != speed)
+        // {
+        //     changeSimulationSpeed(speed);
                 
-        }
-        foreach(CelestialObject co in CelestialObjects)
-        {   
-            //if(co.getName().Equals("Jupiter"))
-            if(co.getName().Equals("Rocket2") && co.getRigidbody().position.z > 500f)
-            {
-                //changeSimulationSpeed(0.25f);
-                //Debug.Log("YESS");
-            }
-            if(co.getName().Equals("Rocket2") && co.getRigidbody().position.z <500f)
-            {
-                //changeSimulationSpeed(20);
-            }
+        // }
+        // foreach(CelestialObject co in CelestialObjects)
+        // {   
+        //     //if(co.getName().Equals("Jupiter"))
+        //     if(co.getName().Equals("Rocket2") && co.getRigidbody().position.z > 500f)
+        //     {
+        //         //changeSimulationSpeed(0.25f);
+        //         //Debug.Log("YESS");
+        //     }
+        //     if(co.getName().Equals("Rocket2") && co.getRigidbody().position.z <500f)
+        //     {
+        //         //changeSimulationSpeed(20);
+        //     }
 
-        }
-        
+        // }       
+
     }
 
     void updateVelocityAccordingNewtonLawGravitation()
@@ -407,24 +407,27 @@ public class Main : MonoBehaviour
     } 
 
 //**********************************Actions that are not called at the start or periodically, but rather depend on the actions of the user************************************//
-    public void changeSimulationSpeed(float test) //A method that implements the slider.
-    {
-        speed = test;
-        foreach (CelestialObject co in CelestialObjects)
-        {
-            co.getRigidbody().velocity *= (speed/currentSimulationSpeed);
-            //co.getRigidbody().velocity *= speed;
-        }
-        G *= Mathf.Pow((speed/currentSimulationSpeed),2);
-        currentSimulationSpeed = speed;
-        //currentSimulationSpeed = speed;                                           
-        //G = newG;
-    }
+    // public void changeSimulationSpeed(float test) //A method that implements the slider.
+    // {
+    //     speed = test;
+    //     foreach (CelestialObject co in CelestialObjects)
+    //     {
+    //         co.getRigidbody().velocity *= (speed/currentSimulationSpeed);
+    //         //co.getRigidbody().velocity *= speed;
+    //     }
+    //     G *= Mathf.Pow((speed/currentSimulationSpeed),2);
+    //     currentSimulationSpeed = speed;
+    //     //currentSimulationSpeed = speed;                                           
+    //     //G = newG;
+    // }
 
     public void hasSpeedChanged(float dab)
     {
-        speed = dab;
-        simulationSpeed.text = speed.ToString() + " X" ;
+        //speed = dab;
+        // simulationSpeed.text = speed.ToString() + " X" ;
+
+        Time.timeScale = dab;
+        Time.fixedDeltaTime = (float)0.02 * dab/Time.fixedDeltaTime;
         //newG = G/Mathf.Pow(speed, 2);
     }
 
