@@ -24,6 +24,7 @@ public class InitialPrefab : CelestialObject
     public void dataHasBeenInitialized()
     {
         hasDataBeenInitialized = true;
+        //
     }
 
     public bool getDataInitializedState()

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 using System.IO;
 using System.Linq;
@@ -9,13 +10,22 @@ using System.Linq;
 public class Main : MonoBehaviour
 {
     List<CelestialObject> CelestialObjects = new List<CelestialObject>();   //Create a List that will hold all celestial objects (Basically objects in space)
+    List<CelestialObject> duplicatedCelestialObjects = new List<CelestialObject>();
     InitialPrefab[] InitialPrefabs;  //Create an array that will be populated with the InitialPrefabs types in the unity scene ==> Refer to the Initial Prefab class for propper meaning.
     public float G; //Gravitational constant
     public Text simulationSpeed;    //==>self explanatory
     float currentSimulationSpeed=1; //==>self explanatory, used in conjunction with simulationSpeed.
+    bool mainSceneisPaused = false;
     // Start is called before the first frame update
+    float updateFixedUpdateCountPerSecond;
+    public Transform target;
+    public float newG = 0.0008807525f;
+    float maxVelocity = 0f;
+    public float speed;
+
     void Start()
     {
+        //Debug.Log("Main Scene");
         InitialPrefabs = FindObjectsOfType<InitialPrefab>();  //Gets all objects in the scene with the script InitialPrefab attached.
         initializePrefabs();//This step is such that the names and gameobjects can be correctly assigned to the relavent variables.
                             //It also creates the corresponding rigidbodies.
@@ -25,6 +35,9 @@ public class Main : MonoBehaviour
         readFileData(dataOfEachLineFromFile, 0, 0); //The function that uses the data.
         linkOrbitObjectNameToOrbitObjectandSetInitialVelocity(); // This creates a memory address with the type CelestialObject in each CelestialPbject
                                                                 //such that it knows which object it is orbiting to. It also calculates the velocity of each object given its data.
+        
+        //SceneManager.LoadScene("TrajectoryScene", LoadSceneMode.Additive);
+        //changeSimulationSpeed(50);
         
     }
 
@@ -258,7 +271,7 @@ public class Main : MonoBehaviour
                     
             }
         }
-        CelestialObjects.Add(co); //Add it to the list such that it can be used later.
+            co.clearNetForce(); //This is to make sure that the for during the next update is not additive to the force for the next update.t it can be used later.
     }
 
     void linkOrbitObjectNameToOrbitObjectandSetInitialVelocity() //Now that the data is recorded for each object the velocity can be implemented.
@@ -313,9 +326,70 @@ public class Main : MonoBehaviour
 
 //**********************************************************Start has passed, now proceed to updating*******************************************************//
 
-    void FixedUpdate() //If a function happens during the start phase define it before here
+    async void FixedUpdate() //If a function happens during the start phase define it before here
+    {   
+            updateVelocityAccordingNewtonLawGravitation();
+
+            
+            
+            foreach (CelestialObject co in CelestialObjects)
+            {
+                if(co.getName().Equals("Rocket2")){
+                    //Debug.Log(co.getRigidbody().velocity.x);
+                    Vector3 rocketPositionVector = new Vector3(co.getRigidbody().position.x, co.getRigidbody().position.y, co.getRigidbody().position.z);
+                    if(co.getRigidbody().velocity.x > 1.697f*currentSimulationSpeed)
+                    {
+                        if(mainSceneisPaused == false)
+                        {
+                            pauseMainScene();
+                        }
+
+                    }
+                    
+                    if(co.getRigidbody().velocity.magnitude /currentSimulationSpeed > maxVelocity && co.getRigidbody().position.z > 500)
+                    {
+                        maxVelocity = co.getRigidbody().velocity.magnitude / currentSimulationSpeed;
+                        Vector3 jupiterFlyByDistance = new Vector3(jupiterPositionVector.x - rocketPositionVector.x, jupiterPositionVector.y - rocketPositionVector.y, jupiterPositionVector.z - rocketPositionVector.z);
+                        Debug.Log("The max velocity is: "+ maxVelocity + "The position is: " + co.getRigidbody().position.x + " "+ co.getRigidbody().position.y +" "+ co.getRigidbody().position.z +" THE DISTANCE BETWEEN THE TWO IS " + jupiterFlyByDistance.magnitude);
+                         
+                    }
+
+                    
+                }
+                if(co.getName().Equals("Jupiter"))
+                {
+                    Vector3 jupiterPositionVector = new Vector3(co.getRigidbody().position.x, co.getRigidbody().position.y, co.getRigidbody().position.z);
+                }
+                transform.LookAt(target);
+
+            } 
+            
+            
+            updateFixedUpdateCountPerSecond += 1;
+        
+    }
+    void Update()
     {
-        updateVelocityAccordingNewtonLawGravitation();
+        //if (updateFixedUpdateCountPerSecond != speed)
+        //{
+        //    changeSimulationSpeed(speed);
+        //        
+        //}
+        foreach(CelestialObject co in CelestialObjects)
+        {   
+            if(co.getName().Equals("Jupiter"))
+            if(co.getName().Equals("Rocket2") && co.getRigidbody().position.z > 500f)
+            {
+                changeSimulationSpeed(0.25f);
+                //Debug.Log("YESS");
+            }
+            if(co.getName().Equals("Rocket2") && co.getRigidbody().position.z <500f)
+            {
+                changeSimulationSpeed(10);
+            }
+
+        }
+        
     }
 
     void updateVelocityAccordingNewtonLawGravitation()
@@ -325,20 +399,109 @@ public class Main : MonoBehaviour
         {
             co.getRigidbody().AddForce(co.getNetForce());
             co.clearNetForce();// This is to make sure that the force during the next update is not additive from the force of the last update.
+            if(co.getName().Equals("Rocket2")){
+                Debug.Log(co.getRigidbody().velocity.magnitude + "Escape Velocity: " + Mathf.Sqrt(2*G*333000/co.getRigidbody().transform.position.magnitude));
+                //Debug.Log(co.getRigidbody().position.x +" Position z " +co.getRigidbody().position.z);
+            }
         }
-    }
+    } 
 
 //**********************************Actions that are not called at the start or periodically, but rather depend on the actions of the user************************************//
-    public void changeSimulationSpeed(float speed) //A method that implements the slider.
+    public void changeSimulationSpeed(float test) //A method that implements the slider.
     {
-        simulationSpeed.text = speed.ToString() + " X" ;
+        speed = test;
         foreach (CelestialObject co in CelestialObjects)
         {
             co.getRigidbody().velocity *= (speed/currentSimulationSpeed);
+            //co.getRigidbody().velocity *= speed;
         }
         G *= Mathf.Pow((speed/currentSimulationSpeed),2);
         currentSimulationSpeed = speed;
+        //currentSimulationSpeed = speed;                                           
+        //G = newG;
     }
+
+    public void hasSpeedChanged(float dab)
+    {
+        speed = dab;
+        simulationSpeed.text = speed.ToString() + " X" ;
+        //newG = G/Mathf.Pow(speed, 2);
+    }
+
+    public void loadMainScene(string scenename)
+    {
+        Debug.Log("Loading Main Scene");
+        SceneManager.LoadScene(scenename);
+    }
+
+    // public void loadTrajectoryScene(string scenename)
+    // {
+
+        
+
+    //     // Debug.Log("Loading Trajectory Scene");
+    //     // Debug.Log("Active scene is "+ SceneManager.GetActiveScene().name);
+    //     // SceneManager.LoadScene(scenename, LoadSceneMode.Single);
+    //     // while (SceneManager.GetActiveScene().buildIndex != SceneUtility.GetBuildIndexByScenePath("Assets/Scenes/TrajectoryScene.unity"))
+    //     // {
+    //     //     Debug.Log("It has not loaded");
+    //     // }
+    //     // SceneManager.SetActiveScene(SceneManager.GetSceneByName(scenename));
+    //     // Debug.Log("Active scene is "+ SceneManager.GetActiveScene().name);
+    // }
+    
+
+    public void pauseMainScene()
+    {
+        mainSceneisPaused = !mainSceneisPaused;
+        foreach(CelestialObject co in CelestialObjects)
+        {
+            if(co.getName().Equals("Rocket2"))
+            {   
+                Debug.Log("Velocity Before: " + co.getRigidbody().velocity.magnitude);
+                co.getRigidbody().velocity = new Vector3(2.23f*currentSimulationSpeed, co.getRigidbody().velocity.y, co.getRigidbody().velocity.z );
+                Debug.Log("Velocity After: " + co.getRigidbody().velocity.magnitude);
+            }
+        }
+        //StartCoroutine(LoadScene());
+        //SceneManager.LoadScene("TrajectoryScene", LoadSceneMode.Single);
+        //SceneManager.SetActiveScene(SceneManager.GetSceneAt(1));
+        
+        //loadTrajectoryScene("TrajectoryScene");
+        //Debug.Log(SceneManager.GetActiveScene().name);
+        /* foreach(CelestialObject co in CelestialObjects)
+        {
+            Instantiate(co.getGameObject());
+            duplicatedCelestialObjects.Add(co);
+        } */
+        
+        
+        
+        //Debug.Log(mainSceneisPaused);
+    }
+    IEnumerator LoadScene()
+    {
+        yield return null;
+        AsyncOperation asyncOperation = SceneManager.LoadSceneAsync("TrajectoryScene", LoadSceneMode.Single);
+        //asyncOperation.allowSceneActivation = false;
+        //Debug.Log("Progress: " + asyncOperation.progress);
+
+        while(!asyncOperation.isDone)
+        {
+            /* Debug.Log("Loading: " + (asyncOperation.progress * 100 + "%"));
+            if (asyncOperation.progress >=0.9f)
+            {
+                asyncOperation.allowSceneActivation = true;
+            } */
+            yield return null;
+        }    
+        foreach(CelestialObject co in CelestialObjects)
+        {
+            SceneManager.MoveGameObjectToScene(co.getGameObject(), SceneManager.GetSceneByName("TrajectoryScene"));
+        }
+        SceneManager.UnloadSceneAsync("TrajectoryScene");
+
+    } 
 
     //To Do: change the zoom of the camera. Possibly give the ability to change cameras.
 }

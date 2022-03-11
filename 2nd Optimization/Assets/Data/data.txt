@@ -28,15 +28,6 @@ position = x =72.3 y=0 z=0
 radius = 5
 END
 
-START
-ISINITIALPREFAB
-type = planet
-mass = 1.0
-name = Earth
-orbits = Sun
-position = x =100 y=0 z=0
-radius = 5
-END
 
 START
 ISINITIALPREFAB
@@ -53,8 +44,8 @@ ISINITIALPREFAB
 type = planet
 name = Jupiter
 mass= 317.8
-position = x =520 y=0 z=0
-radius = 10
+position = x =504.7 y=0 z=125.21
+radius = 0.04692014
 orbits = Sun
 END
 
@@ -85,6 +76,16 @@ name = Neptune
 mass= 17.1
 position = x =3018 y=0 z=0
 radius = 9
+orbits = Sun
+END
+
+START
+ISINITIALPREFAB
+type = planet
+name = Rocket2
+mass= 1e-7
+position = x =0 y=0 z=-100
+radius = 0.000001
 orbits = Sun
 END
 ENDTXT
