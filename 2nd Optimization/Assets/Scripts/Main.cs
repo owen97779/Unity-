@@ -33,6 +33,7 @@ public class Main : MonoBehaviour
         {CelestialObjects.Add(ip);} //This adds all InitialPrefabs into the big "catch all" tent of CelestialObjects list. It is possible because InitialObjects is a child class of CelestialObjects.
         string[] dataOfEachLineFromFile = System.IO.File.ReadAllLines(@"Assets/Data/data.txt"); //Reads the data in the file
         readFileData(dataOfEachLineFromFile, 0, 0); //The function that uses the data.
+        setPositionToPerihelion();
         linkOrbitObjectNameToOrbitObjectandSetInitialVelocity(); // This creates a memory address with the type CelestialObject in each CelestialPbject
                                                                 //such that it knows which object it is orbiting to. It also calculates the velocity of each object given its data.
         
@@ -194,6 +195,14 @@ public class Main : MonoBehaviour
                     prefabRigidbody.velocity = velocity;
                     prefab.hasSetVelocity();
                     break;
+
+                case string perihelion when perihelion.Contains("perihelion"):
+                    prefab.setPerihelion(float.Parse(trimmedData));
+                    break;
+                
+                case string aphelion when aphelion.Contains("aphelion"):
+                    prefab.setAphelion(float.Parse(trimmedData));
+                    break;
                     
             }
         }
@@ -274,6 +283,20 @@ public class Main : MonoBehaviour
             co.clearNetForce(); //This is to make sure that the for during the next update is not additive to the force for the next update.t it can be used later.
     }
 
+    void setPositionToPerihelion()
+    {
+        foreach(CelestialObject co in CelestialObjects)
+        {
+            if(co.getType().Equals("planet"))
+            {
+                if(co.getPerihelion() != 0 && co.getAphelion() != 0)
+                {
+                    co.calculateSemiMajorAxis();
+                    co.getRigidbody().transform.position = new Vector3(co.getPerihelion(),0,0);
+                }
+            }
+        }
+    }
     void linkOrbitObjectNameToOrbitObjectandSetInitialVelocity() //Now that the data is recorded for each object the velocity can be implemented.
     {
         foreach (CelestialObject co in CelestialObjects)
@@ -298,7 +321,8 @@ public class Main : MonoBehaviour
                                                                         //It also nullifies the ability for objects that don't have another object to orbit from having initial velcity.
             {
                 Vector3 separationVector = co.getOrbitTarget().getRigidbody().transform.position - co.getRigidbody().transform.position;
-                float speed = Mathf.Pow(co.getNetForce().magnitude * separationVector.magnitude/co.getRigidbody().mass,(float)0.5);
+                // float speed = Mathf.Pow(co.getNetForce().magnitude * separationVector.magnitude/co.getRigidbody().mass,(float)0.5);
+                float speed = Mathf.Pow(G*(co.getRigidbody().mass + co.getOrbitTarget().getRigidbody().mass)*((2/separationVector.magnitude)-(1/co.getSemiMajorAxis())),(float)0.5);
                 Vector3 velocityDirection =  Vector3.Cross(co.getOrbitPlaneVector(),separationVector).normalized;
                 Vector3 velocity = velocityDirection * speed;
                 co.getRigidbody().velocity = velocity;
