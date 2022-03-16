@@ -365,30 +365,12 @@ public class Main : MonoBehaviour
             } 
             
             
-            updateFixedUpdateCountPerSecond += 1;
+            updateFixedUpdateCountPerSecond += Time.timeScale*Time.fixedDeltaTime;
+            Debug.Log(updateFixedUpdateCountPerSecond);
         
     }
     void Update()
     {
-        if (currentSimulationSpeed != speed)
-        {
-            changeSimulationSpeed(speed);
-                
-        }
-        foreach(CelestialObject co in CelestialObjects)
-        {   
-            //if(co.getName().Equals("Jupiter"))
-            if(co.getName().Equals("Rocket2") && co.getRigidbody().position.z > 500f)
-            {
-                //changeSimulationSpeed(0.25f);
-                //Debug.Log("YESS");
-            }
-            if(co.getName().Equals("Rocket2") && co.getRigidbody().position.z <500f)
-            {
-                //changeSimulationSpeed(20);
-            }
-
-        }
         
     }
 
@@ -423,8 +405,8 @@ public class Main : MonoBehaviour
 
     public void hasSpeedChanged(float dab)
     {
-        speed = dab;
-        simulationSpeed.text = speed.ToString() + " X" ;
+        Time.timeScale = dab;
+        simulationSpeed.text = dab.ToString() + " X" ;
         //newG = G/Mathf.Pow(speed, 2);
     }
 
