@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 using System.IO;
 using System.Linq;
@@ -22,6 +23,21 @@ public class Main : MonoBehaviour
     public float newG = 0.0008807525f;
     float maxVelocity = 0f;
     public float speed;
+    public Text currentDate;
+
+    int year = 1977;
+    int month = 8;
+    int day = 20;
+
+    int maxMonth = 12;
+    int maxDay = 31;
+
+    int leapYear = 1;
+    float closestApproach = 1000f;
+    
+    float rocketMaxVelocity = 0f;
+
+    public float dayPerMonth = 1;
 
     void Start()
     {
@@ -35,9 +51,11 @@ public class Main : MonoBehaviour
         readFileData(dataOfEachLineFromFile, 0, 0); //The function that uses the data.
         linkOrbitObjectNameToOrbitObjectandSetInitialVelocity(); // This creates a memory address with the type CelestialObject in each CelestialPbject
                                                                 //such that it knows which object it is orbiting to. It also calculates the velocity of each object given its data.
-        
+        setRocketVelocity();
         //SceneManager.LoadScene("TrajectoryScene", LoadSceneMode.Additive);
         //changeSimulationSpeed(50);
+        string startingTime = "1977:8:20";
+        currentDate.text = startingTime;
         
     }
 
@@ -309,6 +327,24 @@ public class Main : MonoBehaviour
         } 
     }
 
+    void setRocketVelocity()
+    {
+        foreach(CelestialObject co in CelestialObjects)
+        {
+            if(co.getName().Equals("Rocket2"))
+            {
+                //co.getRigidbody().velocity = new Vector3(2.23f*currentSimulationSpeed, co.getRigidbody().velocity.y, co.getRigidbody().velocity.z );
+                Vector3 separationVector = co.getOrbitTarget().getRigidbody().transform.position - co.getRigidbody().transform.position;
+                Vector3 velocityDirection =  Vector3.Cross(co.getOrbitPlaneVector(),separationVector).normalized;
+                //THE OLD VELOCITY IS 2.21
+                Vector3 velocity = velocityDirection * 2.211f*currentSimulationSpeed;
+                co.getRigidbody().velocity = velocity;
+                Debug.Log("ROCKET VEL is: "+ co.getRigidbody().velocity.x + " " + co.getRigidbody().velocity.y + " " + co.getRigidbody().velocity.z); 
+
+            }
+        }
+    }
+
     void calculateNetForce() //Newtons law of gravitation
     {
         for (int i = 0; i < CelestialObjects.Count -1; i++) //This is the object concerning
@@ -326,52 +362,102 @@ public class Main : MonoBehaviour
 
 //**********************************************************Start has passed, now proceed to updating*******************************************************//
 
-    async void FixedUpdate() //If a function happens during the start phase define it before here
+    void FixedUpdate() //If a function happens during the start phase define it before here
     {   
             updateVelocityAccordingNewtonLawGravitation();
-
+            Vector3 rocketPosition = new Vector3(0f,0f,0f);
+            Vector3 jupiterPosition = new Vector3(0f,0f,0f);
+            
             
             
             foreach (CelestialObject co in CelestialObjects)
             {
-                if(co.getName().Equals("Rocket2")){
-                    //Debug.Log(co.getRigidbody().velocity.x);
-                    //Vector3 rocketPositionVector = new Vector3(co.getRigidbody().position.x, co.getRigidbody().position.y, co.getRigidbody().position.z);
-                    if(co.getRigidbody().velocity.x > 1.697f*currentSimulationSpeed)
-                    {
-                        if(mainSceneisPaused == false)
-                        {
-                            pauseMainScene();
-                        }
-
-                    }
-                    
-                    if(co.getRigidbody().velocity.magnitude /currentSimulationSpeed > maxVelocity && co.getRigidbody().position.z > 500)
+                if(co.getName().Equals("Rocket2"))
+                {                  
+                    if(co.getRigidbody().velocity.magnitude /currentSimulationSpeed > maxVelocity)
                     {
                         maxVelocity = co.getRigidbody().velocity.magnitude / currentSimulationSpeed;
-                        //Vector3 jupiterFlyByDistance = new Vector3(jupiterPositionVector.x - rocketPositionVector.x, jupiterPositionVector.y - rocketPositionVector.y, jupiterPositionVector.z - rocketPositionVector.z);
-                        Debug.Log("The max velocity is: "+ maxVelocity + "The position is: " + co.getRigidbody().position.x + " "+ co.getRigidbody().position.y +" "+ co.getRigidbody().position);
-                         
+                        Debug.Log("The max velocity is: "+ maxVelocity + "The position is: " + co.getRigidbody().transform.position.x + " "+ co.getRigidbody().transform.position.y +" "+ co.getRigidbody().transform.position.z);     
+                        //Debug.Log("TEST");
+                        //Vector3 jupiterFlyByDistance = new Vector3(jupiterPositionVector.x - rocketPositionVector.x, jupiterPositionVector.y - rocketPositionVector.y, jupiterPositionVector.z - rocketPositionVector.z);      
                     }
-
+                    rocketPosition = new Vector3(co.getRigidbody().transform.position.x, co.getRigidbody().transform.position.y, co.getRigidbody().transform.position.z);
                     
+                }
+                if(co.getName().Equals("Rocket2") && co.getRigidbody().transform.position.x < -300 && co.getRigidbody().transform.position.x > -600)
+                {
+                    if(co.getRigidbody().velocity.magnitude > rocketMaxVelocity)
+                    {
+                        rocketMaxVelocity = co.getRigidbody().velocity.magnitude;
+                    }
                 }
                 if(co.getName().Equals("Jupiter"))
                 {
+                    //Debug.Log("Jupiter velocity is " + co.getRigidbody().velocity.magnitude);
                     //Vector3 jupiterPositionVector = new Vector3(co.getRigidbody().position.x, co.getRigidbody().position.y, co.getRigidbody().position.z);
+                    jupiterPosition = new Vector3(co.getRigidbody().transform.position.x, co.getRigidbody().transform.position.y, co.getRigidbody().transform.position.z);
                 }
-                transform.LookAt(target);
+                if(co.getName().Equals("Saturn"))
+                {
+                    
+                    //Debug.Log("Saturn velocity is: " + co.getRigidbody().velocity.magnitude);
+                }
 
-            } 
+            }
+
+            Vector3 jupiterFlyByDistance = jupiterPosition - rocketPosition;
             
+            if(jupiterFlyByDistance.magnitude < closestApproach)
+            {
+                closestApproach = jupiterFlyByDistance.magnitude;
+
+            }
+            Debug.Log("The distance is: " + closestApproach + " and the max v is: " + rocketMaxVelocity);
+            //Debug.Log(rocketPosition.x + "  " + rocketPosition.z);
+
             
+            if(updateFixedUpdateCountPerSecond >= dayPerMonth * currentSimulationSpeed)
+            {
+                day++;
+                if(month == 2 && leapYear == 4)
+                {
+                    if(day > 29)
+                    {
+                        day = 1;
+                        month++;
+                        leapYear = 0;
+                    }
+                }
+                else if(month == 2)
+                {
+                    if(day > 28)
+                    {
+                        day = 1;
+                        month++;
+                    }
+                }
+                else if(day > maxDay || (month == 4 && day > maxDay - 1)|| (month == 6 && day > maxDay - 1)|| (month == 9 && day > maxDay - 1)|| (month == 11 && day > maxDay - 1))
+                {
+                    day = 1;
+                    month++;
+                    if(month > maxMonth)
+                    {
+                        month = 1;
+                        year++;
+                        leapYear++;
+                        
+                    }
+                }
+                setDateTimeString();
+                updateFixedUpdateCountPerSecond =0;
+            }   
             updateFixedUpdateCountPerSecond += Time.timeScale*Time.fixedDeltaTime;
-            Debug.Log(updateFixedUpdateCountPerSecond);
+
         
     }
     void Update()
     {
-        
+
     }
 
     void updateVelocityAccordingNewtonLawGravitation()
@@ -403,9 +489,17 @@ public class Main : MonoBehaviour
         //G = newG;
     }
 
+    public void setDateTimeString()
+    {
+
+        string currentTime = year + ":" + month + ":" + day;
+        currentDate.text = currentTime;
+    }
+
     public void hasSpeedChanged(float dab)
     {
         Time.timeScale = dab;
+        currentSimulationSpeed = dab;
         simulationSpeed.text = dab.ToString() + " X" ;
         //newG = G/Mathf.Pow(speed, 2);
     }
@@ -433,34 +527,7 @@ public class Main : MonoBehaviour
     // }
     
 
-    public void pauseMainScene()
-    {
-        mainSceneisPaused = !mainSceneisPaused;
-        foreach(CelestialObject co in CelestialObjects)
-        {
-            if(co.getName().Equals("Rocket2"))
-            {   
-                Debug.Log("Velocity Before: " + co.getRigidbody().velocity.magnitude);
-                co.getRigidbody().velocity = new Vector3(2.23f*currentSimulationSpeed, co.getRigidbody().velocity.y, co.getRigidbody().velocity.z );
-                Debug.Log("Velocity After: " + co.getRigidbody().velocity.magnitude);
-            }
-        }
-        //StartCoroutine(LoadScene());
-        //SceneManager.LoadScene("TrajectoryScene", LoadSceneMode.Single);
-        //SceneManager.SetActiveScene(SceneManager.GetSceneAt(1));
-        
-        //loadTrajectoryScene("TrajectoryScene");
-        //Debug.Log(SceneManager.GetActiveScene().name);
-        /* foreach(CelestialObject co in CelestialObjects)
-        {
-            Instantiate(co.getGameObject());
-            duplicatedCelestialObjects.Add(co);
-        } */
-        
-        
-        
-        //Debug.Log(mainSceneisPaused);
-    }
+
     IEnumerator LoadScene()
     {
         yield return null;
