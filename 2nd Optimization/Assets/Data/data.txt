@@ -14,7 +14,7 @@ type = planet
 mass = 0.0553
 name = Mecury
 orbits = Sun
-position = x =38.7 y=0 z=0
+position = x =14.37993 y=0 z=-43.072355
 radius = 2
 END
 
@@ -24,17 +24,26 @@ type = planet
 mass = 0.815
 name = Venus
 orbits = Sun
-position = x =72.3 y=0 z=0
+position = x =43.1585300 y=0 z=57.97467
 radius = 5
 END
 
+START
+ISINITIALPREFAB
+type = planet
+name = Earth
+mass= 1
+position = x =86.184195 y=0 z=-54.55507
+radius = 0.0042758
+orbits = Sun
+END
 
 START
 ISINITIALPREFAB
 type = planet
 name = Mars
 mass= 0.107
-position = x =152 y=0 z=0
+position = x =105.01198 y=0 z=102.11534
 radius = 3
 orbits = Sun
 END
@@ -44,7 +53,7 @@ ISINITIALPREFAB
 type = planet
 name = Jupiter
 mass= 317.8
-position = x =504.777 y=0 z=124.93  
+position = x =163.087 y=0 z=493.764
 radius = 0.04692014
 orbits = Sun
 END
@@ -54,8 +63,8 @@ ISINITIALPREFAB
 type = planet
 name = Saturn
 mass= 95.2
-position = x =957 y=0 z=0
-radius = 9
+position = x =-747.799 y=0 z=597.198
+radius = 0.039082
 orbits = Sun
 END
 
@@ -84,7 +93,7 @@ ISINITIALPREFAB
 type = planet
 name = Rocket2
 mass= 1e-7
-position = x =0 y=0 z=-100
+position = x =87.21064 y=0 z=-52.5424
 radius = 0.000001
 orbits = Sun
 END
