@@ -14,9 +14,6 @@ public class CelestialObject : MonoBehaviour
     protected Rigidbody rigidbody;    
     protected bool setVelocity; //This checks if this object has its velocity set by data in data.txt. If it has than this value will be set to true.
     protected string type;
-    protected float semiMajorAxis;
-    protected float perihelion;
-    protected float aphelion;
 
     //The keyword virtual is to enable the feature of override in its child classes
     //I think the names of the functions are self explanatory.
@@ -30,7 +27,6 @@ public class CelestialObject : MonoBehaviour
         rigidbody = Object.GetComponent<Rigidbody>();
         orbitPlaneVector = new Vector3(0f,1f,0f);
         setVelocity = false;
-        semiMajorAxis = 0;
     }
 
     public void setGameObject(GameObject go)// There is no need to set gameobjects from data for prefabs and initialprefabs.
@@ -111,30 +107,7 @@ public class CelestialObject : MonoBehaviour
     {
         return type;
     }
-    public virtual void setPerihelion(float p)
-    {
-        perihelion = p;
-    }
-    public virtual float getPerihelion()
-    {
-        return perihelion;
-    }
-    public virtual float getAphelion()
-    {
-        return aphelion;
-    }
-    public virtual void setAphelion(float a)
-    {
-        aphelion = a;
-    }
-    public virtual void calculateSemiMajorAxis()
-    {
-        semiMajorAxis = perihelion + aphelion;
-    }
-    public virtual float getSemiMajorAxis()
-    {
-        return semiMajorAxis;    
-    }
+
 
     // void Start()
     // {

@@ -14,8 +14,6 @@ type = planet
 mass = 0.0553
 name = Mecury
 orbits = Sun
-aphelion = 46.7
-perihelion = 30.7
 position = x =38.7 y=0 z=0
 radius = 2
 END
@@ -26,31 +24,16 @@ type = planet
 mass = 0.815
 name = Venus
 orbits = Sun
-perihelion = 71.8
-aphelion = 72.8
 position = x =72.3 y=0 z=0
 radius = 5
 END
 
-START
-ISINITIALPREFAB
-type = planet
-name = Earth
-mass = 1
-perihelion = 98.3
-aphelion = 101.7
-position = x =100 y=0 z=0
-radius = 2
-orbits = Sun
-END
 
 START
 ISINITIALPREFAB
 type = planet
 name = Mars
 mass= 0.107
-perihelion = 138.1
-aphelion = 166.62
 position = x =152 y=0 z=0
 radius = 3
 orbits = Sun
@@ -61,8 +44,6 @@ ISINITIALPREFAB
 type = planet
 name = Jupiter
 mass= 317.8
-perihelion = 495.1
-aphelion = 545.7
 position = x =504.777 y=0 z=124.93  
 radius = 0.04692014
 orbits = Sun
@@ -73,8 +54,6 @@ ISINITIALPREFAB
 type = planet
 name = Saturn
 mass= 95.2
-perihelion = 907.5
-aphelion = 1007.1
 position = x =957 y=0 z=0
 radius = 9
 orbits = Sun
@@ -85,8 +64,6 @@ ISINITIALPREFAB
 type = planet
 name = Uranus
 mass= 14.5
-perihelion = 1826.7
-aphelion = 2006.3
 position = x =1917 y=0 z=0
 radius = 9
 orbits = Sun
@@ -97,8 +74,6 @@ ISINITIALPREFAB
 type = planet
 name = Neptune
 mass= 17.1
-perihelion = 2988.7
-aphelion = 3047.4
 position = x =3018 y=0 z=0
 radius = 9
 orbits = Sun
