@@ -34,8 +34,11 @@ public class Main : MonoBehaviour
 
     int leapYear = 1;
     float closestApproach = 1000f;
+    float closestApproach2 = 1000f;
     
     float rocketMaxVelocity = 0f;
+
+    float rocketMaxVelocity2 = 0f;
 
     public float dayPerMonth = 1;
 
@@ -367,7 +370,7 @@ public class Main : MonoBehaviour
             updateVelocityAccordingNewtonLawGravitation();
             Vector3 rocketPosition = new Vector3(0f,0f,0f);
             Vector3 jupiterPosition = new Vector3(0f,0f,0f);
-            
+            Vector3 saturnPosition = new Vector3(0f,0f,0f);
             
             
             foreach (CelestialObject co in CelestialObjects)
@@ -397,10 +400,18 @@ public class Main : MonoBehaviour
                     //Vector3 jupiterPositionVector = new Vector3(co.getRigidbody().position.x, co.getRigidbody().position.y, co.getRigidbody().position.z);
                     jupiterPosition = new Vector3(co.getRigidbody().transform.position.x, co.getRigidbody().transform.position.y, co.getRigidbody().transform.position.z);
                 }
+                if(co.getName().Equals("Rocket2") && co.getRigidbody().transform.position.x < -900)
+                {
+                    if(co.getRigidbody().velocity.magnitude > rocketMaxVelocity)
+                    {
+                        rocketMaxVelocity2 = co.getRigidbody().velocity.magnitude;
+                    }
+                    
+                    
+                }
                 if(co.getName().Equals("Saturn"))
                 {
-                    
-                    //Debug.Log("Saturn velocity is: " + co.getRigidbody().velocity.magnitude);
+                    saturnPosition = new Vector3(co.getRigidbody().transform.position.x,co.getRigidbody().transform.position.y,co.getRigidbody().transform.position.z);
                 }
 
             }
@@ -410,9 +421,17 @@ public class Main : MonoBehaviour
             if(jupiterFlyByDistance.magnitude < closestApproach)
             {
                 closestApproach = jupiterFlyByDistance.magnitude;
+                Debug.Log("The distance from Jupiter is: " + closestApproach + " and the max v is: " + rocketMaxVelocity);
 
             }
-            Debug.Log("The distance is: " + closestApproach + " and the max v is: " + rocketMaxVelocity);
+            Vector3 saturnFlyByDistance = saturnPosition - rocketPosition;
+            if(saturnFlyByDistance.magnitude < closestApproach2)
+            {
+                closestApproach2 = saturnFlyByDistance.magnitude;
+                Debug.Log("The distance from Saturn is: " + closestApproach2 + " and the max v is: " + rocketMaxVelocity2);
+
+            }
+            
             //Debug.Log(rocketPosition.x + "  " + rocketPosition.z);
 
             
