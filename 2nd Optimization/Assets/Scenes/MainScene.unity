@@ -276,6 +276,8 @@ MonoBehaviour:
   newG: 0.0008807525
   speed: 1
   currentDate: {fileID: 468459700}
+  cam1: {fileID: 963194225}
+  cam2: {fileID: 1029896095}
   dayPerMonth: 1
 --- !u!1 &53221455
 GameObject:
@@ -2273,7 +2275,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1029896096
 Transform:
   m_ObjectHideFlags: 0
@@ -2320,11 +2322,11 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.01
-  far clip plane: 1000
-  field of view: 26.991467
+  far clip plane: 10000000
+  field of view: 60
   orthographic: 0
   orthographic size: 5
-  m_Depth: 0
+  m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295

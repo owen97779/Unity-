@@ -25,6 +25,9 @@ public class Main : MonoBehaviour
     public float speed;
     public Text currentDate;
 
+    public GameObject cam1;
+    public GameObject cam2;
+
     int year = 1977;
     int month = 8;
     int day = 20;
@@ -480,7 +483,16 @@ public class Main : MonoBehaviour
     }
     void Update()
     {
-
+        if(Input.GetButtonDown("Fire1"))
+        {
+            cam1.SetActive(true);
+            cam2.SetActive(false);
+        }
+        if(Input.GetButtonDown("Fire2"))
+        {
+            cam1.SetActive(false);
+            cam2.SetActive(true);
+        }
     }
 
     void updateVelocityAccordingNewtonLawGravitation()
