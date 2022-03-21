@@ -413,6 +413,10 @@ public class Main : MonoBehaviour
                 {
                     saturnPosition = new Vector3(co.getRigidbody().transform.position.x,co.getRigidbody().transform.position.y,co.getRigidbody().transform.position.z);
                 }
+                if(co.getName().Equals("Mecury"))
+                {
+                    Debug.Log("MERCURY V" + co.getRigidbody().velocity.magnitude);
+                }
 
             }
 
