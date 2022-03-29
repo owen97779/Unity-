@@ -63,7 +63,7 @@ ISINITIALPREFAB
 type = planet
 name = Saturn
 mass= 95.2
-position = x =-747.799 y=0 z=597.198
+position = x =-744.476 y=0 z=601.335
 radius = 0.039082
 orbits = Sun
 END
