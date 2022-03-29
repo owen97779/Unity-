@@ -57,11 +57,13 @@ public class Main : MonoBehaviour
         readFileData(dataOfEachLineFromFile, 0, 0); //The function that uses the data.
         linkOrbitObjectNameToOrbitObjectandSetInitialVelocity(); // This creates a memory address with the type CelestialObject in each CelestialPbject
                                                                 //such that it knows which object it is orbiting to. It also calculates the velocity of each object given its data.
-        setRocketVelocity();
+        //setRocketVelocity();
         //SceneManager.LoadScene("TrajectoryScene", LoadSceneMode.Additive);
         //changeSimulationSpeed(50);
         string startingTime = "1977:8:20";
         currentDate.text = startingTime;
+        cam1.SetActive(true);
+        cam2.SetActive(false);
         
     }
 
@@ -218,6 +220,16 @@ public class Main : MonoBehaviour
                     prefabRigidbody.velocity = velocity;
                     prefab.hasSetVelocity();
                     break;
+                
+                case string veldirection when veldirection.Contains("veldirection"):
+                    Vector3 direction = getInitialVectorData(trimmedData);
+                    prefab.setVelocityDirection(direction);
+                    break;
+                
+                case string major when major.Contains("semimajor"):
+                    float axis = float.Parse(trimmedData);
+                    prefab.setSemiMajorAxis(axis);
+                    break;
                     
             }
         }
@@ -292,6 +304,16 @@ public class Main : MonoBehaviour
                     objectRigidbody.velocity = velocity;
                     co.hasSetVelocity();
                     break;
+                
+                case string veldirection when veldirection.Contains("veldirection"):
+                    Vector3 direction = getInitialVectorData(trimmedData);
+                    co.setVelocityDirection(direction);
+                    break;
+
+                case string major when major.Contains("semimajor"):
+                    float axis = float.Parse(trimmedData);
+                    co.setSemiMajorAxis(axis);
+                    break;
                     
             }
         }
@@ -322,8 +344,10 @@ public class Main : MonoBehaviour
                                                                         //It also nullifies the ability for objects that don't have another object to orbit from having initial velcity.
             {
                 Vector3 separationVector = co.getOrbitTarget().getRigidbody().transform.position - co.getRigidbody().transform.position;
-                float speed = Mathf.Pow(co.getNetForce().magnitude * separationVector.magnitude/co.getRigidbody().mass,(float)0.5);
-                Vector3 velocityDirection =  Vector3.Cross(co.getOrbitPlaneVector(),separationVector).normalized;
+                //float speed = Mathf.Pow(co.getNetForce().magnitude * separationVector.magnitude/co.getRigidbody().mass,(float)0.5);
+                float speed = Mathf.Sqrt(G*co.getOrbitTarget().getRigidbody().mass * (2/separationVector.magnitude - 1/co.getSemiMajorAxis()));
+                //Vector3 velocityDirection =  Vector3.Cross(co.getOrbitPlaneVector(),separationVector).normalized;
+                Vector3 velocityDirection =  calculateVectorDirection(co);
                 Vector3 velocity = velocityDirection * speed;
                 co.getRigidbody().velocity = velocity;
             }
@@ -340,11 +364,13 @@ public class Main : MonoBehaviour
             if(co.getName().Equals("Rocket2"))
             {
                 //co.getRigidbody().velocity = new Vector3(2.23f*currentSimulationSpeed, co.getRigidbody().velocity.y, co.getRigidbody().velocity.z );
-                Vector3 separationVector = co.getOrbitTarget().getRigidbody().transform.position - co.getRigidbody().transform.position;
+                /* Vector3 separationVector = co.getOrbitTarget().getRigidbody().transform.position - co.getRigidbody().transform.position;
                 Vector3 velocityDirection =  Vector3.Cross(co.getOrbitPlaneVector(),separationVector).normalized;
                 //THE OLD VELOCITY IS 2.21
                 Vector3 velocity = velocityDirection * 2.211f*currentSimulationSpeed;
-                co.getRigidbody().velocity = velocity;
+                co.getRigidbody().velocity = velocity; */
+                Vector3 velocityDirection = co.getRigidbody().velocity.normalized;
+                co.getRigidbody().velocity = velocityDirection * 2.211f;
                 Debug.Log("ROCKET VEL is: "+ co.getRigidbody().velocity.x + " " + co.getRigidbody().velocity.y + " " + co.getRigidbody().velocity.z); 
 
             }
@@ -364,6 +390,14 @@ public class Main : MonoBehaviour
             }
         }
     }    
+
+    Vector3 calculateVectorDirection(CelestialObject co)
+    {
+        Vector3 velocityDirection = (co.getRigidbody().transform.position - co.getVelocityDirection()).normalized;
+        if((co.getRigidbody().transform.position.z>0&&co.getRigidbody().transform.position.x>0)||(co.getRigidbody().transform.position.z<0&&co.getRigidbody().transform.position.x<0) )
+        {velocityDirection = velocityDirection*(-1);}
+        return velocityDirection;
+    }
 
 
 //**********************************************************Start has passed, now proceed to updating*******************************************************//
@@ -483,15 +517,34 @@ public class Main : MonoBehaviour
     }
     void Update()
     {
-        if(Input.GetButtonDown("Fire1"))
+        if(Input.GetMouseButtonDown(0))
         {
             cam1.SetActive(true);
             cam2.SetActive(false);
         }
-        if(Input.GetButtonDown("Fire2"))
+        if(Input.GetMouseButtonDown(1))
         {
             cam1.SetActive(false);
             cam2.SetActive(true);
+        }
+        if(Input.GetMouseButtonDown(2));
+        {
+            cam2.transform.eulerAngles += 5 * new Vector3(x: -Input.GetAxis("Mouse Y"), y:Input.GetAxis("Mouse X"), z:0);
+        }
+        if(Input.GetKeyDown("1"))
+        {
+            if(Time.timeScale < 30)
+            {
+                hasSpeedChanged(Time.timeScale + 1);
+            }
+            
+        }
+        if(Input.GetKeyDown("2"))
+        {
+            if(Time.timeScale > 1)
+            {
+                hasSpeedChanged(Time.timeScale - 1);
+            }
         }
     }
 
