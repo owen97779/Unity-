@@ -14,6 +14,8 @@ public class CelestialObject : MonoBehaviour
     protected Rigidbody rigidbody;    
     protected bool setVelocity; //This checks if this object has its velocity set by data in data.txt. If it has than this value will be set to true.
     protected string type;
+    protected Vector3 velocityDirection;
+    protected float semiMajorAxis;
 
     //The keyword virtual is to enable the feature of override in its child classes
     //I think the names of the functions are self explanatory.
@@ -107,10 +109,26 @@ public class CelestialObject : MonoBehaviour
     {
         return type;
     }
+    public virtual void setVelocityDirection(Vector3 d)
+    {
+        velocityDirection = d;
+    }
+    public virtual Vector3 getVelocityDirection()
+    {
+        return velocityDirection;
+    }
+    public virtual void setSemiMajorAxis(float axis)
+    {
+        semiMajorAxis = axis;
+    }
+    public virtual float getSemiMajorAxis()
+    {
+        return semiMajorAxis;
+    }
 
 
     // void Start()
-    // {
+    // {080878892
         
     // }
 
