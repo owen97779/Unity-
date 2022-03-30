@@ -16,6 +16,8 @@ public class CelestialObject : MonoBehaviour
     protected string type;
     protected Vector3 velocityDirection;
     protected float semiMajorAxis;
+    protected Vector3 obliquity; //20220330
+    protected float rotationalVelocity; //20220330 The angular velocity of the planets on its own axis.
 
     //The keyword virtual is to enable the feature of override in its child classes
     //I think the names of the functions are self explanatory.
@@ -124,6 +126,22 @@ public class CelestialObject : MonoBehaviour
     public virtual float getSemiMajorAxis()
     {
         return semiMajorAxis;
+    }
+    public virtual void setObliquity(Vector3 o) //20220330
+    {
+        obliquity = o;
+    }
+    public virtual Vector3 getObliquity()   //20220330
+    {
+        return obliquity;
+    }
+    public virtual void setRotationalVelocity(float f) //20220330
+    {
+        rotationalVelocity=f;
+    }
+    public virtual float getRotationalVelocity() //202220330
+    {
+        return rotationalVelocity;
     }
 
 

@@ -57,6 +57,7 @@ public class Main : MonoBehaviour
         readFileData(dataOfEachLineFromFile, 0, 0); //The function that uses the data.
         linkOrbitObjectNameToOrbitObjectandSetInitialVelocity(); // This creates a memory address with the type CelestialObject in each CelestialPbject
                                                                 //such that it knows which object it is orbiting to. It also calculates the velocity of each object given its data.
+        setCelestialObliquity(); //20220330
         //setRocketVelocity();
         //SceneManager.LoadScene("TrajectoryScene", LoadSceneMode.Additive);
         //changeSimulationSpeed(50);
@@ -230,6 +231,16 @@ public class Main : MonoBehaviour
                     float axis = float.Parse(trimmedData);
                     prefab.setSemiMajorAxis(axis);
                     break;
+
+                case string obliquity when obliquity.Contains("obliquity"): //20220330
+                    Vector3 ob = getInitialVectorData(trimmedData);
+                    prefab.setObliquity(ob);
+                    break;
+
+                case string rotvel when rotvel.Contains("rotationVelocity"): //20220330
+                    float rotationalVelocity = float.Parse(trimmedData);
+                    prefab.setRotationalVelocity(rotationalVelocity);
+                    break;        
                     
             }
         }
@@ -314,6 +325,16 @@ public class Main : MonoBehaviour
                     float axis = float.Parse(trimmedData);
                     co.setSemiMajorAxis(axis);
                     break;
+                
+                case string obliquity when obliquity.Contains("obliquity"): //20220330
+                    Vector3 ob = getInitialVectorData(trimmedData);
+                    co.setObliquity(ob);
+                    break;   
+
+                case string rotvel when rotvel.Contains("rotationVelocity"): //20220330
+                    float rotationalVelocity = float.Parse(trimmedData);
+                    co.setRotationalVelocity(rotationalVelocity);
+                    break;  
                     
             }
         }
@@ -371,7 +392,7 @@ public class Main : MonoBehaviour
                 co.getRigidbody().velocity = velocity; */
                 Vector3 velocityDirection = co.getRigidbody().velocity.normalized;
                 co.getRigidbody().velocity = velocityDirection * 2.211f;
-                Debug.Log("ROCKET VEL is: "+ co.getRigidbody().velocity.x + " " + co.getRigidbody().velocity.y + " " + co.getRigidbody().velocity.z); 
+                //Debug.Log("ROCKET VEL is: "+ co.getRigidbody().velocity.x + " " + co.getRigidbody().velocity.y + " " + co.getRigidbody().velocity.z); //20220329
 
             }
         }
@@ -399,6 +420,17 @@ public class Main : MonoBehaviour
         return velocityDirection;
     }
 
+    void setCelestialObliquity() //20220330
+    {
+        foreach (CelestialObject co in CelestialObjects)
+        {
+            if (co.getObliquity() != null)
+            {
+                co.transform.Rotate(co.getObliquity());
+            }
+        }
+    }
+
 
 //**********************************************************Start has passed, now proceed to updating*******************************************************//
 
@@ -417,7 +449,7 @@ public class Main : MonoBehaviour
                     if(co.getRigidbody().velocity.magnitude /currentSimulationSpeed > maxVelocity)
                     {
                         maxVelocity = co.getRigidbody().velocity.magnitude / currentSimulationSpeed;
-                        Debug.Log("The max velocity is: "+ maxVelocity + "The position is: " + co.getRigidbody().transform.position.x + " "+ co.getRigidbody().transform.position.y +" "+ co.getRigidbody().transform.position.z);     
+                        //Debug.Log("The max velocity is: "+ maxVelocity + "The position is: " + co.getRigidbody().transform.position.x + " "+ co.getRigidbody().transform.position.y +" "+ co.getRigidbody().transform.position.z);    //20220329 
                         //Debug.Log("TEST");
                         //Vector3 jupiterFlyByDistance = new Vector3(jupiterPositionVector.x - rocketPositionVector.x, jupiterPositionVector.y - rocketPositionVector.y, jupiterPositionVector.z - rocketPositionVector.z);      
                     }
@@ -444,7 +476,6 @@ public class Main : MonoBehaviour
                         rocketMaxVelocity2 = co.getRigidbody().velocity.magnitude;
                     }
                     
-                    
                 }
                 if(co.getName().Equals("Saturn"))
                 {
@@ -452,8 +483,13 @@ public class Main : MonoBehaviour
                 }
                 if(co.getName().Equals("Mecury"))
                 {
-                    Debug.Log("MERCURY V" + co.getRigidbody().velocity.magnitude);
+                    //Debug.Log("MERCURY V" + co.getRigidbody().velocity.magnitude);  //20220329
                 }
+                if((co.getType().Equals("planet") || co.getType().Equals("star")) && !co.getName().Equals("Rocket2"))
+                {
+                    co.transform.Rotate(0f,co.getRotationalVelocity() *(-1.0f),0f, Space.Self);
+                }
+                
 
             }
 
@@ -462,14 +498,14 @@ public class Main : MonoBehaviour
             if(jupiterFlyByDistance.magnitude < closestApproach)
             {
                 closestApproach = jupiterFlyByDistance.magnitude;
-                Debug.Log("The distance from Jupiter is: " + closestApproach + " and the max v is: " + rocketMaxVelocity);
+                //Debug.Log("The distance from Jupiter is: " + closestApproach + " and the max v is: " + rocketMaxVelocity);  20220329
 
             }
             Vector3 saturnFlyByDistance = saturnPosition - rocketPosition;
             if(saturnFlyByDistance.magnitude < closestApproach2)
             {
                 closestApproach2 = saturnFlyByDistance.magnitude;
-                Debug.Log("The distance from Saturn is: " + closestApproach2 + " and the max v is: " + rocketMaxVelocity2);
+                // Debug.Log("The distance from Saturn is: " + closestApproach2 + " and the max v is: " + rocketMaxVelocity2); 20220329
 
             }
             
@@ -556,7 +592,7 @@ public class Main : MonoBehaviour
             co.getRigidbody().AddForce(co.getNetForce());
             co.clearNetForce();// This is to make sure that the force during the next update is not additive from the force of the last update.
             if(co.getName().Equals("Rocket2")){
-                Debug.Log(co.getRigidbody().velocity.magnitude + "Escape Velocity: " + Mathf.Sqrt(2*G*333000/co.getRigidbody().transform.position.magnitude));
+                //Debug.Log(co.getRigidbody().velocity.magnitude + "Escape Velocity: " + Mathf.Sqrt(2*G*333000/co.getRigidbody().transform.position.magnitude));  //20220329
                 //Debug.Log(co.getRigidbody().position.x +" Position z " +co.getRigidbody().position.z);
             }
         }
@@ -594,7 +630,7 @@ public class Main : MonoBehaviour
 
     public void loadMainScene(string scenename)
     {
-        Debug.Log("Loading Main Scene");
+        //Debug.Log("Loading Main Scene");  //20220329
         SceneManager.LoadScene(scenename);
     }
 
