@@ -38,8 +38,8 @@
   <ItemGroup>
      <Compile Include="Assets/Scripts/CelestialObject.cs" />
      <Compile Include="Assets/Scripts/Main.cs" />
-     <Compile Include="Assets/Scripts/InitialPrefab.cs" />
      <Compile Include="Assets/Scripts/FreeCam.cs" />
+     <Compile Include="Assets/Scripts/InitialPrefab.cs" />
      <None Include="Assets/Data/data.txt" />
     <Reference Include="UnityEngine">
         <HintPath>/home/owen97779/Unity/Hub/Editor/2020.3.27f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>

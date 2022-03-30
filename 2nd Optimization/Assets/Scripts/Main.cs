@@ -437,9 +437,9 @@ public class Main : MonoBehaviour
                     //Vector3 jupiterPositionVector = new Vector3(co.getRigidbody().position.x, co.getRigidbody().position.y, co.getRigidbody().position.z);
                     jupiterPosition = new Vector3(co.getRigidbody().transform.position.x, co.getRigidbody().transform.position.y, co.getRigidbody().transform.position.z);
                 }
-                if(co.getName().Equals("Rocket2") && co.getRigidbody().transform.position.x < -900)
+                if(co.getName().Equals("Rocket2") && co.getRigidbody().transform.position.x < -850)
                 {
-                    if(co.getRigidbody().velocity.magnitude > rocketMaxVelocity)
+                    if(co.getRigidbody().velocity.magnitude > rocketMaxVelocity2)
                     {
                         rocketMaxVelocity2 = co.getRigidbody().velocity.magnitude;
                     }
@@ -452,7 +452,7 @@ public class Main : MonoBehaviour
                 }
                 if(co.getName().Equals("Mecury"))
                 {
-                    Debug.Log("MERCURY V" + co.getRigidbody().velocity.magnitude);
+                    //Debug.Log("MERCURY V" + co.getRigidbody().velocity.magnitude);
                 }
 
             }
