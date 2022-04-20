@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.XR;
 using TMPro;
 
 using System.IO;
@@ -15,8 +16,11 @@ public class Main : MonoBehaviour
     InitialPrefab[] InitialPrefabs;  //Create an array that will be populated with the InitialPrefabs types in the unity scene ==> Refer to the Initial Prefab class for propper meaning.
     public float G; //Gravitational constant
     public Text simulationSpeed;    //==>self explanatory
+    public Text simulationSpeedVR;
     float currentSimulationSpeed=1; //==>self explanatory, used in conjunction with simulationSpeed.
     bool mainSceneisPaused = false;
+
+    public bool gameStart = false;
     // Start is called before the first frame update
     float updateFixedUpdateCountPerSecond;
     public Transform target;
@@ -24,6 +28,7 @@ public class Main : MonoBehaviour
     float maxVelocity = 0f;
     public float speed;
     public Text currentDate;
+    public Text currentDateVR;
 
     public GameObject cam1;
     public GameObject cam2;
@@ -44,6 +49,7 @@ public class Main : MonoBehaviour
     float rocketMaxVelocity2 = 0f;
 
     public float dayPerMonth = 1;
+    private InputDevice targetDevice;
 
     void Start()
     {
@@ -62,8 +68,9 @@ public class Main : MonoBehaviour
         //changeSimulationSpeed(50);
         string startingTime = "1977:8:20";
         currentDate.text = startingTime;
-        cam1.SetActive(true);
-        cam2.SetActive(false);
+        cam1.SetActive(false);
+        cam2.SetActive(true);
+
         
     }
 
@@ -535,7 +542,8 @@ public class Main : MonoBehaviour
         {
             if(Time.timeScale < 30)
             {
-                hasSpeedChanged(Time.timeScale + 1);
+                //hasSpeedChanged(Time.timeScale + 1);
+                hasSpeedChanged(30);
             }
             
         }
@@ -543,9 +551,15 @@ public class Main : MonoBehaviour
         {
             if(Time.timeScale > 1)
             {
-                hasSpeedChanged(Time.timeScale - 1);
+                //hasSpeedChanged(Time.timeScale - 1);
+                hasSpeedChanged(1);
             }
         }
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            ScreenCapture.CaptureScreenshot("Screenshot.png");
+        }
+
     }
 
     void updateVelocityAccordingNewtonLawGravitation()
@@ -582,6 +596,7 @@ public class Main : MonoBehaviour
 
         string currentTime = year + ":" + month + ":" + day;
         currentDate.text = currentTime;
+        currentDateVR.text = currentTime;
     }
 
     public void hasSpeedChanged(float dab)
@@ -589,6 +604,7 @@ public class Main : MonoBehaviour
         Time.timeScale = dab;
         currentSimulationSpeed = dab;
         simulationSpeed.text = dab.ToString() + " X" ;
+        simulationSpeedVR.text = dab.ToString() + " X" ;
         //newG = G/Mathf.Pow(speed, 2);
     }
 

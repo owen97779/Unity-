@@ -85,8 +85,8 @@ ISINITIALPREFAB
 type = planet
 name = Uranus
 mass= 14.5
-position = x =-1397.86054045 y=0 z=-1236.54216467
-radius = 9
+position = x =-1715.65948989 y=0 z=-684.956014109 
+radius = 0.0170214765101
 orbits = Sun
 veldirection = x=0 y =0 z=-2935.1860004491436
 semimajor=1926.2576030015664
