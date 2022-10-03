@@ -17,8 +17,15 @@ Along with the individual [report](report.pdf), a scientific presentation [poste
 
 ## Videos and Media
 Below is a short trailer of the grand-tour and fly-bys in action.
+
+
 [![Watch the video](./Media/thumbnail.png)](https://youtu.be/F32aUpgwAY4)
 
+
 Orbital trajectories of the planets and Voyager 2.
+
+
 ![Planetary Orbit](./Media/orbits2.png)
+
+
 ![Voyager 2 Orbit](./Media/orbits.png)
